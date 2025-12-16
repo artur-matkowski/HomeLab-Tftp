@@ -13,3 +13,5 @@ services:
       - 69:69/udp
     volumes:
       - tftp_data:/var/lib/tftpboot
+    stdin_open: true    # keep STDIN open so you can attach
+    tty: true           # allocate a TTY for interactive console
