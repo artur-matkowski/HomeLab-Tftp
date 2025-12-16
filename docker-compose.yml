@@ -1,11 +1,11 @@
 version: '3.8'
 
 services:
-  tftp-server:
+  12-tftp-server:
     build: .
-    container_name: tftp-server
+    container_name: 12-tftp-server
     restart: unless-stopped
     ports:
       - "69:69/udp"
     volumes:
-      - ./tftp-files:/var/lib/tftpboot
+      - ${TFTP_ROOT}:/var/lib/tftpboot
