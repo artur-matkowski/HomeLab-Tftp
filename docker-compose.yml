@@ -1,11 +1,14 @@
-version: '3.8'
+volumes:
+  tftp_data:
+    external: true
+    name: ${TFTP_VOLUME_NAME}
 
 services:
-  12-tftp-server:
+  tftp-server:
     build: .
-    container_name: 12-tftp-server
+    container_name: ${CONTAINER_NAME:tftp-server}
     restart: unless-stopped
     ports:
-      - "69:69/udp"
+      - 69:69/udp"
     volumes:
-      - ${TFTP_ROOT}:/var/lib/tftpboot
+      - tftp_data:/var/lib/tftpboot
