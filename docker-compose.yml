@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  tftp-server:
+    build: .
+    container_name: tftp-server
+    restart: unless-stopped
+    
+    # Network configuration
+    network_mode: host
+    
+    # Alternative bridge network configuration (comment out network_mode: host above to use this)
+    # ports:
+    #   - "69:69/udp"
+    
+    # Volume mounts
+    volumes:
+      - ./tftp-files:/var/lib/tftp/files:rw
+      - ./logs:/var/log/tftp:rw
+    
+    # Environment variables
+    environment:
+      - TFTP_ROOT=/var/lib/tftp/files
+      - TFTP_OPTIONS=--secure --create --verbose --foreground --address 0.0.0.0:69
+      - TFTP_USER=tftp
+      - TFTP_GROUP=tftp
+    
+    # Security options optimized for Proxmox VM
+    security_opt:
+      - no-new-privileges:true
+    
+    # Resource limits (adjust for N100 system)
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 128M
+        reservations:
+          cpus: '0.1'
+          memory: 32M
+    
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "echo 'test' | timeout 3 tftp localhost 69 -c put /dev/stdin health.tmp 2>/dev/null || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Logging configuration
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+# Optional: Create a custom network for better isolation
+# networks:
+#   tftp-net:
+#     driver: bridge
+#     ipam:
+#       config:
+#         - subnet: 172.20.0.0/24
