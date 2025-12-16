@@ -10,5 +10,5 @@ RUN mkdir -p /var/lib/tftpboot && \
 # Expose TFTP port
 EXPOSE 69/udp
 
-# Start TFTP server
-CMD ["/usr/sbin/in.tftpd", "--foreground", "--secure", "/var/lib/tftpboot"]
+# Start TFTP server with PXE boot support
+CMD ["/usr/sbin/in.tftpd", "--foreground", "--secure", "--create", "--timeout", "60", "--retransmit", "5", "/var/lib/tftpboot"]

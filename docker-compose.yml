@@ -9,8 +9,8 @@ services:
     container_name: 12-tftp-server
     restart: unless-stopped
     network_mode: host
-    ports:
-      - 69:69/udp
+    #ports:
+    #  - 69:69/udp
     volumes:
       - tftp_data:/var/lib/tftpboot
     stdin_open: true    # keep STDIN open so you can attach
