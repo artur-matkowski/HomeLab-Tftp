@@ -6,9 +6,10 @@ volumes:
 services:
   tftp-server:
     build: .
-    container_name: ${CONTAINER_NAME:tftp-server}
+    container_name: 12-tftp-server
     restart: unless-stopped
+    network_mode: host
     ports:
-      - 69:69/udp"
+      - 69:69/udp
     volumes:
       - tftp_data:/var/lib/tftpboot
